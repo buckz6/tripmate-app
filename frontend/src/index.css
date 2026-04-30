@@ -1,0 +1,196 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: #f8fafc;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+.hero-gradient {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at top left, rgba(45, 212, 191, 0.13), transparent 28%),
+    linear-gradient(135deg, #0d9488 0%, #0f766e 35%, #0d9488 100%);
+}
+
+.hero-gradient::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(120deg, rgba(16, 185, 129, 0.14), rgba(59, 130, 246, 0.1), rgba(20, 184, 166, 0.12));
+  animation: heroPulse 12s ease-in-out infinite;
+}
+
+.hero-gradient > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes heroPulse {
+  0%, 100% {
+    transform: translateX(0) scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateX(10px) scale(1.02);
+    opacity: 1;
+  }
+}
+
+.typing-text {
+  width: 100%;
+  animation: typing 4s steps(30, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: rgba(16, 185, 129, 1); }
+}
+
+.page-enter {
+  animation: pageFadeIn 0.45s ease-out;
+}
+
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-container {
+  @apply mx-auto max-w-7xl px-4 py-8;
+}
+
+.card-base {
+  @apply rounded-xl bg-white shadow-md transition hover:shadow-lg;
+}
+
+.page-header {
+  @apply rounded-xl bg-white p-6 shadow-md;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-lg bg-teal-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-teal-500;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center rounded-lg border border-teal-600 bg-white px-5 py-3 text-sm font-semibold text-teal-600 transition hover:bg-teal-50;
+}
+
+.btn-danger {
+  @apply inline-flex items-center justify-center rounded-lg bg-red-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-700;
+}
+
+.input-base {
+  @apply w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20;
+}
+
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  header,
+  nav,
+  footer,
+  .no-print,
+  .leaflet-container,
+  button,
+  .rounded-full,
+  .hero-gradient::before {
+    display: none !important;
+  }
+
+  .leaflet-pane,
+  .leaflet-tile,
+  .leaflet-marker-icon,
+  .leaflet-marker-shadow,
+  .leaflet-control {
+    display: none !important;
+  }
+
+  .page-enter,
+  .rounded-[2rem],
+  .rounded-[1.75rem],
+  .rounded-[2.5rem],
+  .rounded-3xl,
+  .rounded-full,
+  .p-6,
+  .p-8,
+  .p-10,
+  .p-12,
+  .shadow-2xl,
+  .shadow-xl,
+  .shadow-lg,
+  .shadow-sm,
+  .bg-slate-950\/90,
+  .bg-slate-900\/90,
+  .bg-slate-900,
+  .bg-slate-800,
+  .bg-slate-900\/95,
+  .bg-slate-950,
+  .bg-white\/10,
+  .bg-white {
+    background: transparent !important;
+    box-shadow: none !important;
+    color: #000 !important;
+  }
+
+  .text-slate-200,
+  .text-slate-300,
+  .text-slate-400,
+  .text-slate-500,
+  .text-slate-600,
+  .text-slate-700,
+  .text-slate-800,
+  .text-slate-900,
+  .text-white,
+  .text-white\/90,
+  .text-teal-400,
+  .text-teal-500,
+  .text-teal-600 {
+    color: #000 !important;
+  }
+
+  .bg-white\/10,
+  .bg-white,
+  .bg-slate-950\/90,
+  .bg-slate-900\/90,
+  .bg-teal-500,
+  .bg-slate-900,
+  .bg-slate-800,
+  .bg-slate-950 {
+    background: transparent !important;
+  }
+
+  img {
+    display: none !important;
+  }
+
+  .border,
+  .border-slate-800,
+  .border-slate-700 {
+    border-color: #000 !important;
+  }
+}
