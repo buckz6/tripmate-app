@@ -6,6 +6,8 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 
+const groupRoutes = require('./routes/groups');
+
 const authRoutes        = require('./routes/auth');
 const aiRoutes          = require('./routes/ai');
 const journalRoutes     = require('./routes/journals');
@@ -74,6 +76,8 @@ app.use('/api/community',                   authMiddleware, communityRoutes);
 app.use('/api/profile',                     authMiddleware, profileRoutes);
 app.use('/api/notifications',               authMiddleware, notificationRoutes);
 
+app.use('/api/groups', groupRoutes);
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
@@ -102,5 +106,6 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT} [${process.env.NODE_ENV || 'development'}]`);
   scheduler.start();
 });
+
 
 module.exports = app;

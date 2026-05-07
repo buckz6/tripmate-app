@@ -132,6 +132,82 @@ const migrations = [
       )
     `,
   },
+  {
+    name: 'group_trips',
+    sql: `
+      CREATE TABLE IF NOT EXISTS group_trips (
+        id             INT UNSIGNED  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        booking_id     INT UNSIGNED,
+        coordinator_id INT UNSIGNED  NOT NULL,
+        title          VARCHAR(255)  NOT NULL,
+        invite_code    VARCHAR(20)   NOT NULL UNIQUE,
+        parsed_data    JSON,
+        status         ENUM('open','closed') NOT NULL DEFAULT 'open',
+        created_at     DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT fk_group_trips_coordinator
+          FOREIGN KEY (coordinator_id) REFERENCES users(id) ON DELETE CASCADE,
+        CONSTRAINT fk_group_trips_booking
+          FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE SET NULL,
+        INDEX idx_group_trips_invite (invite_code)
+      )
+    `,
+  },
+  {
+    name: 'group_members',
+    sql: `
+      CREATE TABLE IF NOT EXISTS group_members (
+        id            INT UNSIGNED  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        group_trip_id INT UNSIGNED  NOT NULL,
+        user_id       INT UNSIGNED,
+        name          VARCHAR(100)  NOT NULL,
+        gender        ENUM('male','female','other') NOT NULL DEFAULT 'other',
+        preferences   TEXT,
+        role          ENUM('coordinator','member') NOT NULL DEFAULT 'member',
+        joined_at     DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT fk_group_members_trip
+          FOREIGN KEY (group_trip_id) REFERENCES group_trips(id) ON DELETE CASCADE,
+        CONSTRAINT fk_group_members_user
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+        INDEX idx_group_members_trip (group_trip_id)
+      )
+    `,
+  },
+  {
+    name: 'room_allocations',
+    sql: `
+      CREATE TABLE IF NOT EXISTS room_allocations (
+        id            INT UNSIGNED  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        group_trip_id INT UNSIGNED  NOT NULL,
+        room_number   VARCHAR(50)   NOT NULL,
+        room_type     VARCHAR(100)  NOT NULL,
+        member_ids    JSON          NOT NULL,
+        ai_reason     TEXT,
+        created_at    DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT fk_room_allocations_trip
+          FOREIGN KEY (group_trip_id) REFERENCES group_trips(id) ON DELETE CASCADE,
+        INDEX idx_room_allocations_trip (group_trip_id)
+      )
+    `,
+  },
+  {
+    name: 'checkin_status',
+    sql: `
+      CREATE TABLE IF NOT EXISTS checkin_status (
+        id            INT UNSIGNED  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        group_trip_id INT UNSIGNED  NOT NULL,
+        user_id       INT UNSIGNED  NOT NULL,
+        status        ENUM('pending','completed') NOT NULL DEFAULT 'pending',
+        checkin_url   TEXT,
+        completed_at  DATETIME,
+        CONSTRAINT fk_checkin_trip
+          FOREIGN KEY (group_trip_id) REFERENCES group_trips(id) ON DELETE CASCADE,
+        CONSTRAINT fk_checkin_user
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        UNIQUE KEY uq_checkin (group_trip_id, user_id),
+        INDEX idx_checkin_trip (group_trip_id)
+      )
+    `,
+  },
 ];
 
 // ── Startup validation ────────────────────────────────────────────────────────
